@@ -13,20 +13,6 @@ class Node {
   }
 }
 
-const checkVisited = (child, visited) => {
-  for (let i in visited) {
-    if (visited[i]._value === child._value) return true;
-  }
-  return false;
-};
-
-const checkQueue = (child, queue) => {
-  for (let i in queue) {
-    if (queue[i]._value === child._value) return true;
-  }
-  return false;
-};
-
 const bfs = (node) => {
   let visited = [];
   let queue = [];
@@ -36,13 +22,13 @@ const bfs = (node) => {
 
   while (!(queue.length === 0)) {
     let cur = queue.shift();
-    if (!checkVisited(cur, visited)) visited.push(cur);
+    if (!visited.includes(cur)) visited.push(cur);
 
     for (let i = 0; i < cur._children.length; i++) {
       let child = cur._children[i];
-      if (!checkVisited(child, visited) && !checkQueue(child, queue))
-        queue.push(child);
+      if (!visited.includes(child) && !queue.includes(child)) queue.push(child);
     }
+
     console.log(
       "Queue: ",
       queue.map((node) => node._value)

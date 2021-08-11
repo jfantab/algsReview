@@ -107,8 +107,17 @@ class PriorityQueue {
         this.buildMinHeap();
     }
 
+    setValue(index, value) {
+        this.queue[index].weight = value;
+        this.buildMinHeap();
+    }
+
     isEmpty() {
         return this.size === 0;
+    }
+
+    isInQueue(obj) {
+        return this.queue.indexOf(obj) !== -1;
     }
 
     getValue(index) {
@@ -117,11 +126,6 @@ class PriorityQueue {
 
     setPrevious(index, prevNode) {
         this.queue[index].prev = prevNode;
-    }
-
-    setWeight(index, value) {
-        this.queue[index].weight = value;
-        this.buildMinHeap();
     }
 }
 
@@ -146,51 +150,59 @@ const bfs = (node) => {
     return visited;
 };
 
-const dijkstra = (start, nodes) => {
-    const distanceMappings = nodes.map((node) =>
-        start === node
-            ? { weight: 0, node, prev: {} }
-            : { weight: MAX, node, prev: {} }
+const prim = (nodes) => {
+    const mapping = nodes.map((node, index) =>
+        index === 0 ? { node, weight: 0 } : { node, weight: MAX }
     );
+
     const visited = new PriorityQueue([]);
-    const unvisited = new PriorityQueue(distanceMappings);
+    const unvisited = new PriorityQueue(mapping);
+    const mst = [];
+
+    const cur = unvisited.getValue(0);
+    visited.push(cur);
+    unvisited.remove(cur.node);
 
     while (unvisited.size > 0) {
-        const cur = unvisited.getValue(0).node;
+        let minChild,
+            minParent,
+            minWeight = MAX;
 
-        visited.push(unvisited.getValue(0));
-        unvisited.remove(cur);
+        visited.queue.forEach((v) => {
+            const parent = v.node;
+            const weights = parent.weights;
 
-        const weights = cur._weights;
-
-        cur._children.forEach((child, index) => {
-            if (visited.findIndex(child) === -1) {
-                let loc = unvisited.findIndex(child);
-                let loc2 = visited.findIndex(cur);
-
-                const curWeight = visited.getValue(loc2).weight;
-                const originalWeight = unvisited.getValue(loc).weight;
-
-                const newWeight = weights[index] + curWeight;
-
-                if (newWeight < originalWeight) {
-                    unvisited.setWeight(loc, newWeight);
-                    loc = unvisited.findIndex(child);
-                    unvisited.setPrevious(loc, cur);
+            parent.children.forEach((child, index) => {
+                const visitedNodes = visited.queue.map((v) => v.node);
+                if (!visitedNodes.includes(child)) {
+                    if (weights[index] <= minWeight) {
+                        minChild = child;
+                        minParent = v;
+                        minWeight = weights[index];
+                    }
                 }
-            }
+            });
         });
 
+        let next = { node: minChild, weight: minWeight };
+        visited.push(next);
+        unvisited.remove(next.node);
+        mst.push({ parent: minParent.node, child: minChild });
+
+        minWeight = MAX;
+
+        console.log("MST: ", mst);
+        console.log("Visited: ", visited.queue);
         console.log("Unvisited: ", unvisited.queue);
-        console.log("\n\nVisited: ", visited.queue);
+        console.log("\n\n");
     }
 
-    return visited;
+    return mst;
 };
 
 const n8 = new Node(8);
 const n6 = new Node(6, [n8], [1]);
-const n7 = new Node(7, [n6], [9]);
+const n7 = new Node(7);
 const n5 = new Node(5);
 const n4 = new Node(4, [n7], [10]);
 const n3 = new Node(3, [n4, n6], [3, 11]);
@@ -215,4 +227,4 @@ const root = n1;
 const source = n1;
 const nodes = bfs(root);
 
-dijkstra(source, nodes);
+prim(nodes);

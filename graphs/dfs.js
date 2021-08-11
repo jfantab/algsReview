@@ -13,20 +13,6 @@ class Node {
   }
 }
 
-const checkVisited = (child, visited) => {
-  for (let i in visited) {
-    if (visited[i]._value === child._value) return true;
-  }
-  return false;
-};
-
-const checkstack = (child, stack) => {
-  for (let i in stack) {
-    if (stack[i]._value === child._value) return true;
-  }
-  return false;
-};
-
 const dfs = (node) => {
   let visited = [];
   let stack = [];
@@ -40,8 +26,7 @@ const dfs = (node) => {
 
     for (let i = 0; i < cur._children.length; i++) {
       let child = cur._children[i];
-      if (!checkVisited(child, visited) && !checkstack(child, stack))
-        stack.push(child);
+      if (!visited.includes(child) && !stack.includes(child)) stack.push(child);
     }
     console.log(
       "stack: ",

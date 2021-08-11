@@ -24,7 +24,7 @@ class Heap {
 
   balanceHeapAtIndex(index) {
     const parent = this.getParentIndex(index);
-    if (this.heap[index] > this.heap[parent]) index = parent;
+    if (this.heap[index] < this.heap[parent]) index = parent;
 
     console.log("Before heapifying: ", this.heap);
 
@@ -36,7 +36,7 @@ class Heap {
       else if (leftChild >= this.size) this.swap(rightChild, index);
       else {
         largerChild =
-          this.heap[rightChild] >= this.heap[leftChild]
+          this.heap[rightChild] <= this.heap[leftChild]
             ? rightChild
             : leftChild;
         this.swap(largerChild, index);
@@ -44,8 +44,8 @@ class Heap {
 
       index = this.getParentIndex(index);
     } while (
-      this.heap[index] <= this.heap[this.getRightChildIndex(index)] ||
-      this.heap[index] <= this.heap[this.getLeftChildIndex(index)]
+      this.heap[index] >= this.heap[this.getRightChildIndex(index)] ||
+      this.heap[index] >= this.heap[this.getLeftChildIndex(index)]
     );
 
     console.log("Heapified: ", this.heap);
@@ -61,8 +61,8 @@ class Heap {
     let rightChild = this.getRightChildIndex(index);
     let leftChild = this.getLeftChildIndex(index);
 
-    if (this.heap[rightChild] >= this.heap[index]) this.swap(rightChild, index);
-    if (this.heap[leftChild] >= this.heap[index]) this.swap(leftChild, index);
+    if (this.heap[rightChild] <= this.heap[index]) this.swap(rightChild, index);
+    if (this.heap[leftChild] <= this.heap[index]) this.swap(leftChild, index);
 
     this.balanceHeapAtHead(rightChild);
     this.balanceHeapAtHead(leftChild);
@@ -76,10 +76,9 @@ class Heap {
 
   pop() {
     if (this.isEmpty()) return;
-    const maxEle = this.heap.shift();
+    this.heap.shift();
     this.size--;
     this.balanceHeapAtHead();
-    return maxEle;
   }
 
   isEmpty() {
@@ -93,18 +92,34 @@ class PriorityQueue {
     this.queue = new Heap(queue);
   }
 
-  getMaxElement() {
-    return this.queue.heap[0];
-  }
-
-  addMaxElement(val) {
+  push(val) {
     this.queue.push(val);
     this.size++;
   }
 
-  removeMaxElement() {
-    return this.queue.pop();
+  getValue(index) {
+    return this.queue.heap[index];
+  }
+
+  setValue(index, val) {
+    this.queue.heap[index] = val;
+    this.queue.balanceHeapAtIndex(index);
+  }
+
+  getMinElement() {
+    return this.size === 0 ? -1 : this.queue.heap[0];
+  }
+
+  addMinElement(val) {
+    this.queue.push(val);
+    this.size++;
+  }
+
+  removeMinElement() {
+    if (this.size === 0) return -1;
+    const minEle = this.queue.pop();
     this.size--;
+    return minEle;
   }
 
   print() {
@@ -112,8 +127,7 @@ class PriorityQueue {
   }
 }
 
-const q = new PriorityQueue([10, 8, 6, 3, 7, 1, 5, 2]);
-q.addMaxElement(20);
-q.print();
-console.log("\n\n");
-console.log(q.getMaxElement());
+const h = new PriorityQueue([7, 12, 20, 17, 13, 30, 35, 22]);
+
+h.push(14);
+h.setValue(8, 9);

@@ -116,10 +116,6 @@ class PriorityQueue {
         return this.size === 0;
     }
 
-    isInQueue(obj) {
-        return this.queue.indexOf(obj) !== -1;
-    }
-
     getValue(index) {
         return this.queue[index];
     }
@@ -163,7 +159,7 @@ const prim = (nodes) => {
     visited.push(cur);
     unvisited.remove(cur.node);
 
-    while (unvisited.size > 0) {
+    while (!unvisited.isEmpty()) {
         let minChild,
             minParent,
             minWeight = MAX;
@@ -172,21 +168,26 @@ const prim = (nodes) => {
             const parent = v.node;
             const weights = parent.weights;
 
+            //choosing node with smallest distance adjacent
+            //to visited nodes
             parent.children.forEach((child, index) => {
                 const visitedNodes = visited.queue.map((v) => v.node);
-                if (!visitedNodes.includes(child)) {
-                    if (weights[index] <= minWeight) {
-                        minChild = child;
-                        minParent = v;
-                        minWeight = weights[index];
-                    }
+                if (
+                    !visitedNodes.includes(child) &&
+                    weights[index] <= minWeight
+                ) {
+                    minChild = child;
+                    minParent = v;
+                    minWeight = weights[index];
                 }
             });
         });
 
-        let next = { node: minChild, weight: minWeight };
+        const next = { node: minChild, weight: minWeight };
         visited.push(next);
         unvisited.remove(next.node);
+
+        //add pair to MST
         mst.push({ parent: minParent.node, child: minChild });
 
         minWeight = MAX;

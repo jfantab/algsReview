@@ -155,33 +155,44 @@ const dijkstra = (start, nodes) => {
     const visited = new PriorityQueue([]);
     const unvisited = new PriorityQueue(distanceMappings);
 
-    while (unvisited.size > 0) {
+    console.log("Unvisited: ", unvisited.queue);
+    console.log("\n\nVisited: ", visited.queue);
+
+    while (!unvisited.isEmpty()) {
+        //grab node with MIN weight in priority queue
         const cur = unvisited.getValue(0).node;
 
+        //remove and add from appropriate priority queues
         visited.push(unvisited.getValue(0));
         unvisited.remove(cur);
 
         const weights = cur._weights;
 
+        //loop through current node's children to find
+        //shortest additional distance to traverse
         cur._children.forEach((child, index) => {
             if (visited.findIndex(child) === -1) {
+                //grab appropriate object representations
+                //of objects
                 let loc = unvisited.findIndex(child);
                 let loc2 = visited.findIndex(cur);
 
-                const curWeight = visited.getValue(loc2).weight;
                 const originalWeight = unvisited.getValue(loc).weight;
+                const curWeight = visited.getValue(loc2).weight;
 
                 const newWeight = weights[index] + curWeight;
 
                 if (newWeight < originalWeight) {
+                    //updating with new shorter distance
                     unvisited.setWeight(loc, newWeight);
+
                     loc = unvisited.findIndex(child);
                     unvisited.setPrevious(loc, cur);
                 }
             }
         });
 
-        console.log("Unvisited: ", unvisited.queue);
+        console.log("\n\nUnvisited: ", unvisited.queue);
         console.log("\n\nVisited: ", visited.queue);
     }
 

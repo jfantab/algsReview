@@ -12,17 +12,20 @@ const combine = (arr, l, r, mid) => {
     let j = mid + 1;
     let p1, p2;
 
+    //swapping/cycling elements into their proper positions
     while (l <= mid && j <= r) {
         //  increment ahead of element in its proper position
         if (arr[l] <= arr[j]) l++;
         //  swap pairs of values
         for (p1 = l, p2 = j; p2 <= r && arr[p1] >= arr[p2]; p1++, p2++)
             swap(arr, p1, p2);
+        console.log(arr);
     }
 
     //  checking second half for elements out of position
     for (let i = mid + 1; i < r; i++)
         if (arr[i] >= arr[i + 1]) swap(arr, i, i + 1);
+    console.log(arr);
 };
 
 //function to swap two elements of an array in-place
@@ -41,3 +44,7 @@ console.log(arr2, "\n\n");
 const arr3 = [45, 69, 22, 13, 56, 10];
 mergeSortInPlace(arr3, 0, arr3.length - 1);
 console.log(arr3, "\n\n");
+
+const arr4 = [9, 3, 4, 8, 1, 2, 5, 10];
+mergeSortInPlace(arr4, 0, arr4.length - 1);
+console.log(arr4, "\n\n");

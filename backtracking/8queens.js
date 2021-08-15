@@ -65,7 +65,7 @@ const print = () => {
     console.log("\n");
 };
 
-const SIZE = 6;
+const SIZE = 4;
 const board = [];
 for (let i = 0; i < SIZE; i++) {
     board.push([]);

@@ -1,4 +1,3 @@
-/*
 const swap = (arr, i, j) => {
     const a = [...arr];
     const temp = a[i];
@@ -14,7 +13,6 @@ const heap = (arr, size, subsets) => {
         heap(arr, size - 1, subsets);
         arr = size % 2 === 0 ? swap(arr, 0, size - 1) : swap(arr, i, size - 1);
     }
-    console.log(subsets);
     return subsets;
 };
 
@@ -38,7 +36,7 @@ const solve = (arr) => {
     }
     return cost;
 };
-*/
+
 /*
 const solve = (arr, depth = 0, x = 0) => {
     if (depth >= arr.length) return;
@@ -57,7 +55,7 @@ const solve = (arr, depth = 0, x = 0) => {
 };
 */
 
-const solve = (arr) => {};
+//const solve = (arr) => {};
 
 const matrix = [
     [9, 2, 7, 8],

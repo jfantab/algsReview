@@ -8,9 +8,11 @@ class BST {
         BST(Node*);
         Node* add(int);
         Node* add(int, Node*);
+        Node* repair(Node*);
         Node* remove(int);
         Node* remove(int, Node*);
-        void invert();
+        BST* invert();
+        Node* invert(Node*);
         void print();
         void print(Node*);
     private:

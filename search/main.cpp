@@ -16,7 +16,13 @@ int main() {
     n -> add(5);
     n -> add(35);
 
+    n -> remove(11);
+
     n -> print();
+
+    std::cout << std::endl;
+
+    n -> invert() -> print();
 
     delete n;
     n = nullptr;
